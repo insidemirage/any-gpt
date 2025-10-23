@@ -1,0 +1,73 @@
+{
+  "name": "chat-any-gpt",
+  "version": "1.0.0",
+  "description": "A VSCode extension for chatting with any GPT model",
+  "main": "./out/extension.js",
+  "type": "module",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:chat-any-gpt.openChat"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "chat-any-gpt.openChat",
+        "title": "Open Chat with Any GPT"
+      }
+    ]
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start:webview": "vite dev",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "keywords": [
+    "vscode",
+    "extension",
+    "gpt",
+    "chat",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/vscode": "^1.105.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "copy-webpack-plugin": "^13.0.1",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.38.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "html-webpack-plugin": "^5.6.4",
+    "sass": "^1.93.2",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "vscode": "^1.1.37",
+    "webpack": "^5.102.1",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.3.4",
+    "@redux-devtools/extension": "^3.3.0",
+    "@reduxjs/toolkit": "^2.9.2",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "marked": "^16.4.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-redux": "^9.2.0"
+  }
+}
