@@ -1,6 +1,5 @@
 // theme.js (или theme.ts)
-import { createTheme } from '@mui/material/styles'; // Используйте @mui/material для v5+
-
+import { createTheme } from "@mui/material/styles"; // Используйте @mui/material для v5+
 
 const darkulaTheme = {
   backgrounds: {
@@ -21,8 +20,8 @@ const darkulaTheme = {
   },
   codeBlock: {
     background: "#1E1E1E", // Dark background for code
-    text: "#D4D4D4",       // Light text for code, typical for Darcula
-    border: "#3F3F3F",     // Optional: subtle border
+    text: "#D4D4D4", // Light text for code, typical for Darcula
+    border: "#3F3F3F", // Optional: subtle border
   },
   legacy: {
     messageUserBg: "#0d6efd", // Keep original legacy colors or adapt them
@@ -33,21 +32,58 @@ const darkulaTheme = {
 export const theme = createTheme({
   palette: {
     primary: {
-      main: darkulaTheme.backgrounds.bgPrimary
+      main: darkulaTheme.backgrounds.bgPrimary,
     },
     secondary: {
-      main: darkulaTheme.backgrounds.bgSecondary
+      main: darkulaTheme.backgrounds.bgSecondary,
     },
     text: {
       primary: darkulaTheme.textColors.textPrimary,
-      secondary: darkulaTheme.textColors.textSecondary
+      secondary: darkulaTheme.textColors.textSecondary,
     },
 
     // ... другие настройки палитры
   },
-
+  components: {
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          minWidth: "auto",
+          backgroundColor: darkulaTheme.backgrounds.inputField,
+          color: darkulaTheme.textColors.textPrimary,
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: darkulaTheme.textColors.textSecondary,
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: darkulaTheme.textColors.textPrimary,
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: darkulaTheme.textColors.textPrimary,
+          },
+          "&.MuiList-root": {
+            backgroundColor: darkulaTheme.backgrounds.inputField,
+          },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: darkulaTheme.backgrounds.inputField,
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          backgroundColor: darkulaTheme.backgrounds.inputField,
+          color: darkulaTheme.textColors.textPrimary,
+        },
+      },
+    },
+  },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
   },
-  ...darkulaTheme
+  ...darkulaTheme,
 });

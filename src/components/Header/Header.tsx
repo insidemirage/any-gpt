@@ -15,33 +15,40 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ title = "Chat with Any GPT" }) => {
   const { data } = useGetModelsQuery(null);
   const theme = useTheme();
-  const {
-    settings,
-    updateChatSettings
-  } = useChatSettings();
+  const { settings, updateChatSettings } = useChatSettings() as {
+    settings: { model: string };
+    updateChatSettings: (s: { model: string }) => void;
+  };
 
   useEffect(() => {
     if (!data || !data.models) return;
 
-    updateChatSettings({model: data.models[0].name});
-  }, [data, updateChatSettings])
+    updateChatSettings({ model: data.models[0].name });
+  }, [data, updateChatSettings]);
 
   const renderValueFunction = (selectedValue: string | null) => {
     if (!selectedValue) {
-      return <span style={{ color: '#aaa' }}>Select Model.</span>; // Используем затенённый цвет
+      return "Select Model.";
+      // return <span style={{ color: '#aaa' }}>Select Model.</span>; // Используем затенённый цвет
     }
     return selectedValue;
   };
 
   const handleChange = (event: SelectChangeEvent<string | null>) => {
-    updateChatSettings({model: event.target.value});
+    if (event.target.value) {
+      updateChatSettings({ model: event.target.value });
+    }
   };
+
   return (
     <header
       css={css`
         display: flex;
+        align-items: center;
+        justify-content: flex-start;
         background-color: ${theme.backgrounds.bgSecondary};
-        padding: 5px 5px;
+        padding: 5px 10px;
+        flex-shrink:
       `}
     >
       <Select
@@ -49,15 +56,17 @@ const Header: React.FC<HeaderProps> = ({ title = "Chat with Any GPT" }) => {
         id="demo-simple-select"
         onChange={handleChange}
         value={settings.model}
-        label={'Model'}
+        label={"Model"}
         displayEmpty
         renderValue={renderValueFunction}
       >
         <MenuItem disabled value="">
-            <em>Select Model</em>
-          </MenuItem>
+          Select Model
+        </MenuItem>
         {data?.models.map((v: Model) => (
-          <MenuItem key={v.name} value={v.name}>{v.name}</MenuItem>
+          <MenuItem key={v.name} value={v.name}>
+            {v.name}
+          </MenuItem>
         ))}
       </Select>
       <h1
