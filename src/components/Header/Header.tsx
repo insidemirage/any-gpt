@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { css } from "@emotion/react";
 import { Select, MenuItem, useTheme, SelectChangeEvent } from "@mui/material";
-import { useGetModelsQuery } from "@/api/queryModels";
+import { useGetModelsQuery } from "@/api/tagsApi";
 import { useChatSettings } from "@/hooks";
 
 interface Model {
@@ -48,7 +48,11 @@ const Header: React.FC<HeaderProps> = ({ title = "Chat with Any GPT" }) => {
         justify-content: flex-start;
         background-color: ${theme.backgrounds.bgSecondary};
         padding: 5px 10px;
-        flex-shrink:
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
       `}
     >
       <Select

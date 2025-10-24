@@ -3,39 +3,40 @@ import { createTheme } from "@mui/material/styles"; // Используйте @m
 
 const darkulaTheme = {
   backgrounds: {
-    bgPrimary: "#2B2B2B", // Более характерный для Darcula
-    bgSecondary: "#252526", // Немного темнее
-    chatContainer: "#3C3F41", // Сlightly lighter for the chat area
-    inputField: "#3C3F41", // Match chat container or slightly darker/lighter
+    bgPrimary: "#1E1E1E", // Темный фон
+    bgSecondary: "#2D2D2D", // Немного светлее для header
+    chatContainer: "#3A3A3A", // Средний серый для контейнера
+    inputField: "#3A3A3A", // Совпадает
   },
   messageBubbles: {
-    userMessage: "#3C3F41", // Match container or use a subtle accent
-    userMessageText: "#BBBBBB", // Light gray for user text
-    aiMessage: "#3C3F41", // Match container or use a subtle accent
-    aiMessageText: "#BBBBBB", // Light gray for AI text
+    userMessage: "#4A4A4A", // Светлее для сообщений
+    userMessageText: "#F0F0F0", // Очень светлый текст
+    aiMessage: "#4A4A4A",
+    aiMessageText: "#F0F0F0",
   },
   textColors: {
-    textPrimary: "#BBBBBB", // Light gray for primary text
-    textSecondary: "#888888", // Muted gray for secondary text
+    textPrimary: "#F0F0F0", // Светлый текст
+    textSecondary: "#B0B0B0", // Средний
+  },
+  buttonColors: {
+    primary: "#7C3AED", // Фиолетовый акцент
+    secondary: "#A855F7", // Светлее фиолетовый
+    hover: "#C084FC", // Еще светлее для hover
   },
   codeBlock: {
-    background: "#1E1E1E", // Dark background for code
-    text: "#D4D4D4", // Light text for code, typical for Darcula
-    border: "#3F3F3F", // Optional: subtle border
-  },
-  legacy: {
-    messageUserBg: "#0d6efd", // Keep original legacy colors or adapt them
-    messageAssistantBg: "#495057",
+    background: "#0F0F0F",
+    text: "#F8F8F2", // Светлый для кода
+    border: "#4A4A4A",
   },
 };
 
 export const theme = createTheme({
   palette: {
     primary: {
-      main: darkulaTheme.backgrounds.bgPrimary,
+      main: darkulaTheme.buttonColors.primary,
     },
     secondary: {
-      main: darkulaTheme.backgrounds.bgSecondary,
+      main: darkulaTheme.buttonColors.secondary,
     },
     text: {
       primary: darkulaTheme.textColors.textPrimary,
@@ -45,6 +46,17 @@ export const theme = createTheme({
     // ... другие настройки палитры
   },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: darkulaTheme.buttonColors.primary,
+          color: darkulaTheme.textColors.textPrimary,
+          "&:hover": {
+            backgroundColor: darkulaTheme.buttonColors.hover,
+          },
+        },
+      },
+    },
     MuiSelect: {
       styleOverrides: {
         root: {

@@ -8,10 +8,12 @@ interface ScrollableContentProps {
 const ScrollableContent: React.FC<ScrollableContentProps> = ({ children }) => (
   <Box
     sx={{
-      overflowY: "scroll",
+      overflowY: "auto",
       height: "100%",
       flex: 1,
       minHeight: 0,
+      padding: "10px",
+      paddingBottom: "120px", // Space for fixed input
     }}
   >
     {children}
