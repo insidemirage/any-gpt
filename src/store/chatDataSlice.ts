@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { OllamaPrompt } from "../types/ollama";
 
 export interface Message {
   id: string;
@@ -9,13 +8,15 @@ export interface Message {
 }
 
 interface ChatDataState {
-  messages: Message[];
+  currentChatId: string | null;
+  chats: Record<string, { messages: Message[]; name: string }>;
   currentMessage: string;
   isLoading: boolean;
 }
 
 const initialState: ChatDataState = {
-  messages: [],
+  currentChatId: null,
+  chats: {},
   currentMessage: "",
   isLoading: false,
 };
@@ -25,27 +26,52 @@ const chatDataSlice = createSlice({
   initialState,
   reducers: {
     editMessage(state, action: PayloadAction<Partial<Message>>) {
-      const messageIndex = state.messages.findIndex(
+      if (!state.currentChatId || !state.chats[state.currentChatId]) return;
+      const messages = state.chats[state.currentChatId].messages;
+      const messageIndex = messages.findIndex(
         (v) => action.payload.id === v.id
       );
       // TODO: implement error
       if (messageIndex === -1) return;
-      state.messages[messageIndex] = {
-        ...state.messages[messageIndex],
+      messages[messageIndex] = {
+        ...messages[messageIndex],
         ...action.payload,
       };
     },
     addMessage(state, action: PayloadAction<Message>) {
-      state.messages.push(action.payload);
+      if (!state.currentChatId || !state.chats[state.currentChatId]) return;
+      state.chats[state.currentChatId].messages.push(action.payload);
     },
     setCurrentMessage(state, action: PayloadAction<string>) {
       state.currentMessage = action.payload;
     },
     clearMessages(state) {
-      state.messages = [];
+      if (!state.currentChatId || !state.chats[state.currentChatId]) return;
+      state.chats[state.currentChatId].messages = [];
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
+    },
+    createChat(state, action: PayloadAction<{ id: string; name: string }>) {
+      const { id, name } = action.payload;
+      state.chats[id] = { messages: [], name };
+      state.currentChatId = id;
+    },
+    setCurrentChat(state, action: PayloadAction<string>) {
+      if (state.chats[action.payload]) {
+        state.currentChatId = action.payload;
+      }
+    },
+    deleteChat(state, action: PayloadAction<string>) {
+      delete state.chats[action.payload];
+      if (state.currentChatId === action.payload) {
+        state.currentChatId = null;
+      }
+    },
+    renameChat(state, action: PayloadAction<{ id: string; name: string }>) {
+      if (state.chats[action.payload.id]) {
+        state.chats[action.payload.id].name = action.payload.name;
+      }
     },
   },
 });
@@ -56,5 +82,9 @@ export const {
   clearMessages,
   setLoading,
   editMessage,
+  createChat,
+  setCurrentChat,
+  deleteChat,
+  renameChat,
 } = chatDataSlice.actions;
 export default chatDataSlice.reducer;
