@@ -3,6 +3,8 @@ import { css } from "@emotion/react";
 import { Select, MenuItem, useTheme, SelectChangeEvent } from "@mui/material";
 import { useGetModelsQuery } from "@/api/tagsApi";
 import { useChatSettings } from "@/hooks";
+import { useDispatch } from "react-redux";
+import { getTags } from "@/store/actions";
 
 interface Model {
   name: string;
@@ -13,19 +15,13 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ title = "Chat with Any GPT" }) => {
-  const { data } = useGetModelsQuery(null);
   const theme = useTheme();
-  const { settings, updateChatSettings } = useChatSettings() as {
-    settings: { model: string };
-    updateChatSettings: (s: { model: string }) => void;
-  };
+  const dispatch = useDispatch();
+  const { settings, updateChatSettings } = useChatSettings();
 
   useEffect(() => {
-    if (!data || !data.models) return;
-
-    updateChatSettings({ model: data.models[0].name });
-  }, [data, updateChatSettings]);
-
+    dispatch(getTags());
+  }, []);
   const renderValueFunction = (selectedValue: string | null) => {
     if (!selectedValue) {
       return "Select Model.";
@@ -67,9 +63,9 @@ const Header: React.FC<HeaderProps> = ({ title = "Chat with Any GPT" }) => {
         <MenuItem disabled value="">
           Select Model
         </MenuItem>
-        {data?.models.map((v: Model) => (
-          <MenuItem key={v.name} value={v.name}>
-            {v.name}
+        {settings?.tags.map((v) => (
+          <MenuItem key={v} value={v}>
+            {v}
           </MenuItem>
         ))}
       </Select>

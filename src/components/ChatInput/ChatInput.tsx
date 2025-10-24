@@ -1,30 +1,35 @@
-import {
-  useSendGenerateMessageMutation,
-  useSendGenerateMessageStreamMutation,
-  useSendGenerateMessageStreamQuery,
-} from "@/api/chatApi";
 import { useChatSettings } from "@/hooks";
 import { Box, Button, css, TextField, useTheme } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { sendGenerateMessageStream } from "@/store/actions";
 
 export const ChatInput = () => {
-  const { settings } = useChatSettings();
-  // const [generatedMessage, { isLoading, isSuccess, error }] =
-  //   useSendGenerateMessageMutation();
-  const [generateMessageWithStream, { isLoading }] =
-    useSendGenerateMessageStreamMutation();
+  const { settings } = useChatSettings() as { settings: { model: string } };
+  const dispatch = useDispatch();
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleCommitMessage();
+    }
+  };
+
   const handleCommitMessage = () => {
-    // Add error?
-    if (!settings.model) return;
-    // generatedMessage({ prompt: message, model: settings.model });
-    generateMessageWithStream({ prompt: message, model: settings.model });
-    
+    if (!message.trim() || !settings.model) return;
+
+    setIsLoading(true);
+    dispatch(
+      sendGenerateMessageStream({ prompt: message, model: settings.model })
+    );
+    setMessage("");
   };
 
   return (
@@ -47,6 +52,7 @@ export const ChatInput = () => {
         variant="outlined"
         value={message}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
         multiline
         maxRows={5}
         placeholder="Ask something..."

@@ -3,8 +3,10 @@ import { llamaAnswerMock } from "@/ollamaAnswerMock";
 import { ChatMessage } from "../ChatMessage/ChatMessage";
 import ScrollableContent from "../ScrollableContent/ScrollableContent";
 import { ChatInput } from "../ChatInput/ChatInput";
+import { useChatData } from "@/hooks/useChatData";
 
 export const ChatContent = () => {
+  const { chatData, messages } = useChatData();
   return (
     <>
       <div
@@ -16,7 +18,9 @@ export const ChatContent = () => {
         `}
       >
         <ScrollableContent>
-          <ChatMessage message={llamaAnswerMock.response} />
+          {messages.map((v) => {
+            return <ChatMessage key={v.id} message={v.text} />;
+          })}
         </ScrollableContent>
       </div>
       <ChatInput />
