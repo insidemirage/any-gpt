@@ -1,6 +1,5 @@
 import { put, takeEvery } from "redux-saga/effects";
-import { addMessage, editMessage, setLoading } from "../chatDataSlice";
-import { updateChatSettings } from "../settingsSlice";
+import { addMessage, editMessage, setLoading, updateChatSettings } from "../chatDataSlice";
 import { sendGenerateMessageStream, getTags } from "../actions";
 import axiosInstance, { BASE_URL } from "@/api/axiosInstance";
 import { OllamaStreamResponse } from "@/types/ollama";

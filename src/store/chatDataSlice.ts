@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ChatSettings } from "../types/ollama";
 
 export interface Message {
   id: string;
@@ -9,7 +10,7 @@ export interface Message {
 
 interface ChatDataState {
   currentChatId: string | null;
-  chats: Record<string, { messages: Message[]; name: string }>;
+  chats: Record<string, { messages: Message[]; name: string; settings: ChatSettings }>;
   currentMessage: string;
   isLoading: boolean;
 }
@@ -54,7 +55,7 @@ const chatDataSlice = createSlice({
     },
     createChat(state, action: PayloadAction<{ id: string; name: string }>) {
       const { id, name } = action.payload;
-      state.chats[id] = { messages: [], name };
+      state.chats[id] = { messages: [], name, settings: { model: null, tags: [] } };
       state.currentChatId = id;
     },
     setCurrentChat(state, action: PayloadAction<string>) {
@@ -73,6 +74,14 @@ const chatDataSlice = createSlice({
         state.chats[action.payload.id].name = action.payload.name;
       }
     },
+    updateChatSettings(state, action: PayloadAction<Partial<ChatSettings>>) {
+      if (state.currentChatId && state.chats[state.currentChatId]) {
+        state.chats[state.currentChatId].settings = {
+          ...state.chats[state.currentChatId].settings,
+          ...action.payload,
+        };
+      }
+    },
   },
 });
 
@@ -86,5 +95,6 @@ export const {
   setCurrentChat,
   deleteChat,
   renameChat,
+  updateChatSettings,
 } = chatDataSlice.actions;
 export default chatDataSlice.reducer;

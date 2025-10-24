@@ -9,3 +9,9 @@ export interface OllamaStreamResponse {
   response: string;
   done: boolean;
 }
+
+export interface ChatSettings {
+  provider?: string | null;
+  model: string | null;
+  tags: string[];
+}
