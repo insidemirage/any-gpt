@@ -5,6 +5,7 @@ import { Global, css } from "@emotion/react";
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles"; // v5+
 import { theme } from "./styles/theme";
 import { ChatContent } from "./components/ChatContent/ChatContent";
+import { ChatInput } from "./components/ChatInput/ChatInput";
 
 const App: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const App: React.FC = () => {
       />
       <Header />
       <ChatContent />
+      <ChatInput />
     </MuiThemeProvider>
   );
 };

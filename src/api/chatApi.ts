@@ -1,4 +1,4 @@
-import { apiSlice } from "./apiSlice";
+import { apiSlice, BASE_URL } from "./apiSlice";
 
 export const modelsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,7 +10,7 @@ export const modelsApi = apiSlice.injectEndpoints({
         return {
           url: "/api/generate",
           method: "POST",
-          body: { model, prompt, steam: false },
+          body: { model, prompt, stream: false },
         };
       },
     }),

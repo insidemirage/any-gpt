@@ -1,23 +1,30 @@
-import { useSendGenerateMessageMutation } from "@/api/chatApi";
+import {
+  useSendGenerateMessageMutation,
+  useSendGenerateMessageStreamMutation,
+  useSendGenerateMessageStreamQuery,
+} from "@/api/chatApi";
 import { useChatSettings } from "@/hooks";
 import { Box, Button, css, TextField, useTheme } from "@mui/material";
 import React, { useState } from "react";
 
 export const ChatInput = () => {
   const { settings } = useChatSettings();
-  const [generatedMessage, { isLoading, isSuccess, error }] =
-    useSendGenerateMessageMutation();
+  // const [generatedMessage, { isLoading, isSuccess, error }] =
+  //   useSendGenerateMessageMutation();
+  const [generateMessageWithStream, { isLoading }] =
+    useSendGenerateMessageStreamMutation();
   const [message, setMessage] = useState("");
   const theme = useTheme();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
-
   const handleCommitMessage = () => {
     // Add error?
     if (!settings.model) return;
-    generatedMessage({ prompt: message, model: settings.model });
+    // generatedMessage({ prompt: message, model: settings.model });
+    generateMessageWithStream({ prompt: message, model: settings.model });
+    
   };
 
   return (
