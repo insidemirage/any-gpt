@@ -25,6 +25,11 @@ const App: React.FC = () => {
             padding: 0;
             box-sizing: border-box;
           }
+          pre:has(code) {
+            padding: 10px;
+            border-radius: 5px;
+            background: ${theme.codeBlock.background};
+          }
         `}
       />
       <Header />

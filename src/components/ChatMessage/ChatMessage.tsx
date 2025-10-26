@@ -3,39 +3,58 @@ import { marked } from "marked";
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
 import { Theme } from "@mui/material/styles";
+import { ChatRoles } from "@/models/chat";
 
-const chatMessage = (theme: Theme) =>
+const chatMessageContainerCss = (role: ChatRoles) =>
+  css({
+    display: "flex",
+    justifyContent: role === "assistant" ? "flex-start" : "flex-end",
+  });
+
+const chatMessage = (theme: Theme, role: ChatRoles) =>
   css(`
     display: flex;
-  flex-flow: column;
-  background: ${theme.messageBubbles.aiMessage};
-  padding: 1rem 1.8rem;
-  line-height: 1.8rem;
+    flex-flow: column;
+    background: ${
+      role === "assistant"
+        ? theme.messageBubbles.aiMessage
+        : theme.messageBubbles.userMessage
+    };
+    padding: 0.5rem 1rem;
+    line-height: 1.8rem;
+    border-radius: 5px;
+    & p {
+      margin: 0;
+    }
 `);
 
 export const ChatMessage = ({
   message,
-  inProgress = false,
+  role,
 }: {
   message: string;
-  inProgress?: boolean;
+  role: ChatRoles;
 }) => {
   const messageContent = useRef<HTMLDivElement>(null);
   const theme = useTheme();
 
   const chatMessageCss = useMemo(() => {
-    return chatMessage(theme);
-  }, [theme]);
+    return chatMessage(theme, role);
+  }, [theme, role]);
+
+  const containerCss = useMemo(() => {
+    return chatMessageContainerCss(role);
+  }, [role]);
 
   useEffect(() => {
     if (!messageContent.current) return;
-    messageContent.current.innerHTML = marked.parse(message, { async: false });
+    const html = marked.parse(message, { async: false });
+    messageContent.current.innerHTML = html;
   }, [message]);
 
   return (
-    <div css={chatMessageCss}>
-      <div className="chat-sender-name">Qwen</div>
-      <div ref={messageContent}></div>
+    <div css={containerCss}>
+      <div ref={messageContent} css={chatMessageCss}></div>
     </div>
   );
 };

@@ -1,12 +1,11 @@
 import { css } from "@emotion/react";
-import { llamaAnswerMock } from "@/ollamaAnswerMock";
 import { ChatMessage } from "../ChatMessage/ChatMessage";
 import ScrollableContent from "../ScrollableContent/ScrollableContent";
 import { ChatInput } from "../ChatInput/ChatInput";
 import { useChatData } from "@/hooks/useChatData";
 
 export const ChatContent = () => {
-  const { chatData, messages } = useChatData();
+  const { messages } = useChatData();
   return (
     <>
       <div
@@ -19,7 +18,7 @@ export const ChatContent = () => {
       >
         <ScrollableContent>
           {messages.map((v) => {
-            return <ChatMessage key={v.id} message={v.text} />;
+            return <ChatMessage key={v.id} message={v.content} role={v.role} />;
           })}
         </ScrollableContent>
       </div>

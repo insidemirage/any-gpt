@@ -6,7 +6,10 @@ export interface OllamaPrompt {
 export interface OllamaStreamResponse {
   model: string;
   created_at: string;
-  response: string;
+  message: {
+    role: string;
+    content: string;
+  };
   done: boolean;
 }
 

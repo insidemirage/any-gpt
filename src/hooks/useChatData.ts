@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   chatDataSelector,
   addMessage,
-  setCurrentMessage,
   clearMessages,
   messagesSelector,
 } from "@/store";
-import { Message } from "@/store/chatDataSlice";
+import { Message } from "@/models";
 
 export const useChatData = () => {
   const dispatch = useDispatch();
@@ -21,13 +20,6 @@ export const useChatData = () => {
     [dispatch]
   );
 
-  const setCurrentMessageHandler = useCallback(
-    (msg: string) => {
-      dispatch(setCurrentMessage(msg));
-    },
-    [dispatch]
-  );
-
   const clearMessagesHandler = useCallback(() => {
     dispatch(clearMessages());
   }, [dispatch]);
@@ -36,7 +28,6 @@ export const useChatData = () => {
     chatData,
     messages,
     addMessage: addMessageHandler,
-    setCurrentMessage: setCurrentMessageHandler,
     clearMessages: clearMessagesHandler,
   };
 };

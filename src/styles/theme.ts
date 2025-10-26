@@ -9,9 +9,9 @@ const darkulaTheme = {
     inputField: "#3A3A3A", // Совпадает
   },
   messageBubbles: {
-    userMessage: "#4A4A4A", // Светлее для сообщений
+    userMessage: "#4a88c7", // Светлее для сообщений
     userMessageText: "#F0F0F0", // Очень светлый текст
-    aiMessage: "#4A4A4A",
+    aiMessage: "#242323",
     aiMessageText: "#F0F0F0",
   },
   textColors: {
@@ -24,7 +24,7 @@ const darkulaTheme = {
     hover: "#C084FC", // Еще светлее для hover
   },
   codeBlock: {
-    background: "#0F0F0F",
+    background: "rgb(40, 44, 52)",
     text: "#F8F8F2", // Светлый для кода
     border: "#4A4A4A",
   },

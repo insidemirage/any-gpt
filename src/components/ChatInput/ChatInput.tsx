@@ -1,21 +1,22 @@
-import { useChatSettings } from "@/hooks";
 import { Box, Button, css, TextField, useTheme } from "@mui/material";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { sendGenerateMessageStream } from "@/store/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { sendChatMessageStream, setCurrentTask } from "@/store/chatDataSlice";
+import { chatSettingsSelector, currentTaskSelector } from "@/store/selectors";
 
 export const ChatInput = () => {
-  const { settings } = useChatSettings() as { settings: { model: string } };
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const theme = useTheme();
+  const chatSettings = useSelector(chatSettingsSelector);
+  const taskId = useSelector(currentTaskSelector);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (taskId) return;
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleCommitMessage();
@@ -23,13 +24,18 @@ export const ChatInput = () => {
   };
 
   const handleCommitMessage = () => {
-    if (!message.trim() || !settings.model) return;
-
-    setIsLoading(true);
-    dispatch(
-      sendGenerateMessageStream({ prompt: message, model: settings.model })
-    );
-    setMessage("");
+    // If store has task id -> cancel current model task
+    if (taskId) {
+      dispatch(setCurrentTask(null));
+    } else if (message.trim() && chatSettings.model) {
+      dispatch(
+        sendChatMessageStream({
+          prompt: message,
+          model: chatSettings.model,
+        })
+      );
+      setMessage("");
+    }
   };
 
   return (
@@ -78,11 +84,11 @@ export const ChatInput = () => {
         }}
       />
       <Button
-        disabled={!message.trim() || isLoading}
+        disabled={!message.trim() && !taskId}
         sx={{ height: 55 }}
         onClick={handleCommitMessage}
       >
-        Send
+        {taskId ? "Asking..." : "Send"}
       </Button>
     </Box>
   );

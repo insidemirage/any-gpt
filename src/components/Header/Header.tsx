@@ -1,14 +1,10 @@
 import React, { useEffect } from "react";
 import { css } from "@emotion/react";
 import { Select, MenuItem, useTheme, SelectChangeEvent } from "@mui/material";
-import { useGetModelsQuery } from "@/api/tagsApi";
 import { useChatSettings } from "@/hooks";
 import { useDispatch } from "react-redux";
 import { getTags } from "@/store/actions";
 
-interface Model {
-  name: string;
-}
 
 interface HeaderProps {
   title?: string;

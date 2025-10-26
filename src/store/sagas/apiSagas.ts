@@ -1,33 +1,55 @@
 import { put, takeEvery } from "redux-saga/effects";
-import { addMessage, editMessage, setLoading, updateChatSettings } from "../chatDataSlice";
-import { sendGenerateMessageStream, getTags } from "../actions";
+import {
+  addMessage,
+  editMessage,
+  sendChatMessageStream,
+  setCurrentTask,
+} from "../chatDataSlice";
+import { updateChatSettings } from "../settingsSlice";
+import { getTags } from "../actions";
+import { selectTyped } from "./utils";
 import axiosInstance, { BASE_URL } from "@/api/axiosInstance";
-import { OllamaStreamResponse } from "@/types/ollama";
+import { OllamaStreamResponse } from "@/models/ollama";
 import { nanoid } from "@reduxjs/toolkit";
+import { baseSystemPrompt } from "@/prompts/baseSystemPrompt";
+import { currentTaskSelector, messagesSelector } from "../selectors";
+import { Message } from "@/models";
 
-export function* sendGenerateMessageStreamSaga(
-  action: ReturnType<typeof sendGenerateMessageStream>
+export function* sendChatMessageStreamSaga(
+  action: ReturnType<typeof sendChatMessageStream>
 ) {
   try {
+    const messages: Message[] = yield selectTyped(messagesSelector);
+    const taskId: string = yield selectTyped(currentTaskSelector);
+    if (!taskId) return;
     const { prompt, model } = action.payload;
-    yield put(setLoading(true));
-    const response = yield fetch(`${BASE_URL}/api/generate`, {
+    const abortController = new AbortController();
+    const response = yield fetch(`${BASE_URL}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      signal: abortController.signal,
       body: JSON.stringify({
-        model: "gemma3:1b",
-        prompt: "Tell me a story",
+        model,
+        prompt,
+        messages: [
+          baseSystemPrompt,
+          ...messages.map(({ role, content }) => ({
+            role,
+            content,
+          })),
+        ],
         stream: true,
       }),
     });
+    // .messages.slice(0, -1)
     const id = nanoid();
 
     yield put(
       addMessage({
         id,
-        text: "Thinking...",
-        sender: "ai",
-        timestamp: Date.now(),
+        content: "Thinking...",
+        role: "assistant",
+        timestamp: Date.toString(),
       })
     );
     const reader = response.body.getReader();
@@ -42,14 +64,18 @@ export function* sendGenerateMessageStreamSaga(
       if (done) break;
       const chunk = decoder.decode(value, { stream: true });
       const lines = chunk.split("\n").filter((line) => !!line.trim());
+      const currentTask: string | null = yield selectTyped(currentTaskSelector);
+      if (!currentTask) {
+        return abortController.abort();
+      }
       for (const line of lines) {
         try {
           const json: OllamaStreamResponse = JSON.parse(line);
-          totalText += json.response;
+          totalText += json.message.content;
           yield put(
             editMessage({
               id,
-              text: totalText,
+              content: totalText,
             })
           );
         } catch (err) {
@@ -58,9 +84,10 @@ export function* sendGenerateMessageStreamSaga(
         }
       }
     }
+    yield put(setCurrentTask(null));
   } catch (error) {
     console.error("Streaming error:", error);
-    yield put(setLoading(false));
+    yield put(setCurrentTask(null));
   }
 }
 
@@ -75,6 +102,6 @@ export function* getTagsSaga() {
 }
 
 export const apiSagas = [
-  takeEvery(sendGenerateMessageStream.type, sendGenerateMessageStreamSaga),
+  takeEvery(sendChatMessageStream.type, sendChatMessageStreamSaga),
   takeEvery(getTags.type, getTagsSaga),
 ];
