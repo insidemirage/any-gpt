@@ -1,4 +1,6 @@
-import { Box, Button, css, TextField, useTheme } from "@mui/material";
+import { Box, Button, css, TextField, Tooltip, useTheme } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import StopIcon from "@mui/icons-material/Stop";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendChatMessageStream, setCurrentTask } from "@/store/chatDataSlice";
@@ -83,13 +85,27 @@ export const ChatInput = () => {
           },
         }}
       />
-      <Button
-        disabled={!message.trim() && !taskId}
-        sx={{ height: 55 }}
-        onClick={handleCommitMessage}
-      >
-        {taskId ? "Asking..." : "Send"}
-      </Button>
+      <Tooltip title={taskId ? "Stop" : "Send"}>
+        <Button
+          disabled={!message.trim() && !taskId}
+          sx={{
+            height: 55,
+            width: 55,
+            padding: 0,
+            minWidth: "auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            "& .MuiButton-startIcon": {
+              margin: 0,
+            },
+          }}
+          onClick={handleCommitMessage}
+          startIcon={
+            taskId ? <StopIcon /> : <SendIcon sx={{ height: "100%" }} />
+          }
+        ></Button>
+      </Tooltip>
     </Box>
   );
 };

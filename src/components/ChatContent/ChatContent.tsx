@@ -13,7 +13,7 @@ export const ChatContent = () => {
           display: flex;
           flex-direction: column;
           height: 100%;
-          padding-top: 60px;
+          padding-top: 80px;
         `}
       >
         <ScrollableContent>

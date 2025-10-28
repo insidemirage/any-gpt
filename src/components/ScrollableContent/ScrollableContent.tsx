@@ -16,7 +16,7 @@ const ScrollableContent: React.FC<ScrollableContentProps> = ({ children }) => (
       minHeight: 0,
       padding: "10px",
       paddingBottom: "120px", // Space for fixed input
-      gap: "10px",
+      gap: "15px",
     }}
   >
     {children}

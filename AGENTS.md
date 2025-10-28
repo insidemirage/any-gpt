@@ -1,9 +1,11 @@
 # Agent Guidelines for chat-any-gpt
 
+This project uses Yarn as the package manager. Do not use npm.
+
 ## Build Commands
-- `npm run build` - Build the extension and webview
-- `npm run dev` - Start development server for webview
-- `npm run start:webview` - Alternative dev command for webview
+- `yarn build` - Build the extension and webview
+- `yarn dev` - Start development server for webview
+- `yarn start:webview` - Alternative dev command for webview
 
 ## Code Style Guidelines
 

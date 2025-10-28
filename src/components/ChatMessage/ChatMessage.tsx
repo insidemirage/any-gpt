@@ -6,6 +6,12 @@ import { Theme } from "@mui/material/styles";
 import { ChatRoles } from "@/models/chat";
 import hljs from "highlight.js";
 
+const codePanel = () => {
+  const div = document.createElement("div");
+  div.classList.add("code-panel");
+  return div;
+};
+
 const chatMessageContainerCss = (role: ChatRoles) =>
   css({
     display: "flex",
@@ -24,8 +30,26 @@ const chatMessage = (theme: Theme, role: ChatRoles) =>
     padding: 0.5rem 1rem;
     line-height: 1.8rem;
     border-radius: 5px;
+    max-width: 80%;
     & p {
       margin: 0;
+    }
+    & code {
+      position: relative;
+      border-radius: 10px;
+    }
+    & .inline-snippet {
+      background: #4d5258;
+      border-radius: 3px;
+      padding: 2px;
+    }
+    & .code-panel {
+      position: absolute;
+      width: 100%;
+      height: 25px;
+      background: ${theme.backgrounds.bgPrimary};
+      left: 0;
+      top: 0;
     }
 `);
 
@@ -53,7 +77,14 @@ export const ChatMessage = ({
     const element = document.createElement("div");
     element.innerHTML = html;
     for (const item of element.querySelectorAll("code")) {
-      hljs.highlightBlock(item);
+      const pre = item.parentElement?.tagName.toLowerCase() === "pre";
+      if (pre) {
+        hljs.highlightBlock(item);
+        item.style.paddingTop = "30px";
+        item.insertBefore(codePanel(), item.firstChild);
+      } else {
+        item.classList.add("inline-snippet");
+      }
     }
     messageContent.current.innerHTML = "";
     messageContent.current.appendChild(element);

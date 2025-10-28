@@ -3,15 +3,14 @@ import { createTheme } from "@mui/material/styles"; // Используйте @m
 
 const darkulaTheme = {
   backgrounds: {
-    bgPrimary: "#1E1E1E", // Темный фон
-    bgSecondary: "#2D2D2D", // Немного светлее для header
-    chatContainer: "#3A3A3A", // Средний серый для контейнера
+    bgPrimary: "#232529", // Темный фон
+    bgSecondary: "#1A1C1E", // Немного светлее для header
     inputField: "#3A3A3A", // Совпадает
   },
   messageBubbles: {
-    userMessage: "#4a88c7", // Светлее для сообщений
+    userMessage: "#515663", // Светлее для сообщений
     userMessageText: "#F0F0F0", // Очень светлый текст
-    aiMessage: "#242323",
+    aiMessage: "#2E3033",
     aiMessageText: "#F0F0F0",
   },
   textColors: {
@@ -19,9 +18,9 @@ const darkulaTheme = {
     textSecondary: "#B0B0B0", // Средний
   },
   buttonColors: {
-    primary: "#7C3AED", // Фиолетовый акцент
+    primary: "#3E87FF",
     secondary: "#A855F7", // Светлее фиолетовый
-    hover: "#C084FC", // Еще светлее для hover
+    hover: "#386694", // Еще светлее для hover
   },
   codeBlock: {
     background: "rgb(40, 44, 52)",

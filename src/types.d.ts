@@ -16,7 +16,6 @@ interface CustomThemeAdditions {
   backgrounds: {
     bgPrimary: string; // Основной фон (например, #2B2B2B)
     bgSecondary: string; // Вторичный фон (немного темнее или светлее основного)
-    chatContainer: string; // Фон контейнера чата (например, #3C3F41)
     inputField: string; // Фон поля ввода (например, #3C3F41)
   };
   messageBubbles: {
