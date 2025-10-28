@@ -4,6 +4,7 @@ import { css } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
 import { Theme } from "@mui/material/styles";
 import { ChatRoles } from "@/models/chat";
+import hljs from "highlight.js";
 
 const chatMessageContainerCss = (role: ChatRoles) =>
   css({
@@ -49,7 +50,13 @@ export const ChatMessage = ({
   useEffect(() => {
     if (!messageContent.current) return;
     const html = marked.parse(message, { async: false });
-    messageContent.current.innerHTML = html;
+    const element = document.createElement("div");
+    element.innerHTML = html;
+    for (const item of element.querySelectorAll("code")) {
+      hljs.highlightBlock(item);
+    }
+    messageContent.current.innerHTML = "";
+    messageContent.current.appendChild(element);
   }, [message]);
 
   return (

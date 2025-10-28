@@ -3,7 +3,7 @@ import { Message } from "../models/chat";
 import { OllamaPrompt } from "../models/ollama";
 import { nanoid } from "@reduxjs/toolkit";
 
-interface ChatDataState {
+export interface ChatDataState {
   isLoading: boolean;
   // Represents task (with id) i could use there something simple but let it be id for present chat implementations
   currentTask: string | null;

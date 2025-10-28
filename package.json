@@ -1,8 +1,9 @@
 {
-  "name": "chat-any-gpt",
+  "name": "anygpt",
   "version": "1.0.0",
   "description": "A VSCode extension for chatting with any GPT model",
-  "main": "./out/extension.js",
+  "publisher": "insidemirage",
+  "main": "./dist/extension.cjs",
   "type": "module",
   "engines": {
     "vscode": "^1.74.0"
@@ -10,23 +11,40 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:chat-any-gpt.openChat"
-  ],
   "contributes": {
-    "commands": [
-      {
-        "command": "chat-any-gpt.openChat",
-        "title": "Open Chat with Any GPT"
-      }
-    ]
+    "commands": {
+      "command": "anygpt.reviewFile",
+      "title": "Review Current File"
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "any-gpt",
+          "title": "AnyGpt",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "any-gpt": [
+        {
+          "id": "AnyGptView",
+          "name": "AnyGpt",
+          "type": "webview"
+        }
+      ]
+    }
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "yarn build:ext & yarn build:app",
+    "build:ext": "node build-extension.js",
+    "watch:ext": "node build-extension.js --watch",
+    "build:app": "vite build",
     "preview": "vite preview",
     "start:webview": "vite dev",
-    "lint": "eslint src --ext .ts,.tsx"
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "vscode",
@@ -38,12 +56,14 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/vscode": "^1.105.0",
+    "@types/lodash": "^4.17.20",
+    "@types/vscode": "^1.74.0",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "@vitejs/plugin-react": "^5.0.4",
     "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^7.1.2",
+    "esbuild": "^0.25.11",
     "eslint": "^9.38.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.0",
@@ -52,10 +72,7 @@
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12",
-    "vscode": "^1.1.37",
-    "webpack": "^5.102.1",
-    "webpack-cli": "^6.0.1"
+    "vite": "^7.1.12"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -65,9 +82,14 @@
     "@reduxjs/toolkit": "^2.9.2",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "axios": "^1.12.2",
+    "highlight.js": "^11.11.1",
+    "lodash": "^4.17.21",
     "marked": "^16.4.1",
+    "nanoid": "^5.1.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "redux-saga": "^1.4.2"
   }
 }

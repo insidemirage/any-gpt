@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "@/components/Header/Header";
 import CssBaseline from "@mui/material/CssBaseline"; // Рекомендуется для сброса стилей
 import { Global, css } from "@emotion/react";
@@ -6,8 +6,12 @@ import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles"; // v5+
 import { theme } from "./styles/theme";
 import { ChatContent } from "./components/ChatContent/ChatContent";
 import { ChatInput } from "./components/ChatInput/ChatInput";
+import { loadState } from "./persistence";
 
 const App: React.FC = () => {
+  useEffect(() => {
+    loadState();
+  }, []);
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
@@ -24,11 +28,6 @@ const App: React.FC = () => {
             color: ${theme.textColors.textPrimary};
             padding: 0;
             box-sizing: border-box;
-          }
-          pre:has(code) {
-            padding: 10px;
-            border-radius: 5px;
-            background: ${theme.codeBlock.background};
           }
         `}
       />

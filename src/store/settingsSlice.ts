@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ChatSettings } from "../models/ollama";
 
-interface State {
+export interface SettingsState {
   server: string;
   chatSettings: ChatSettings;
 }
 
-const initialState: State = {
+const initialState: SettingsState = {
   server: "http://localhost:9999",
   chatSettings: { model: null, tags: [] },
 };

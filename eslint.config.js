@@ -22,7 +22,9 @@ export default [
         window: 'readonly',
         process: 'readonly',
         HTMLDivElement: 'readonly',
+        HTMLInputElement: 'readonly',
         console: 'readonly',
+        EventSource: 'readonly',
       },
     },
     plugins: {

@@ -11,9 +11,9 @@ import { selectTyped } from "./utils";
 import axiosInstance, { BASE_URL } from "@/api/axiosInstance";
 import { OllamaStreamResponse } from "@/models/ollama";
 import { nanoid } from "@reduxjs/toolkit";
-import { baseSystemPrompt } from "@/prompts/baseSystemPrompt";
 import { currentTaskSelector, messagesSelector } from "../selectors";
 import { Message } from "@/models";
+import { baseSystemPrompt } from "@/prompts";
 
 export function* sendChatMessageStreamSaga(
   action: ReturnType<typeof sendChatMessageStream>
@@ -24,6 +24,7 @@ export function* sendChatMessageStreamSaga(
     if (!taskId) return;
     const { prompt, model } = action.payload;
     const abortController = new AbortController();
+
     const response = yield fetch(`${BASE_URL}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
