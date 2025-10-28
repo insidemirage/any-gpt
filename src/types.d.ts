@@ -47,17 +47,12 @@ declare module "@mui/material/styles" {
   interface ThemeOptions extends Partial<CustomThemeAdditions> {} // Используем Partial, так как в ThemeOptions свойства могут быть необязательными
 }
 
-declare module "*.md?raw" {
-  const content: string;
-  export default content;
-}
-
 declare global {
   interface Window {
     acquireVsCodeApi(): {
       postMessage(payload: Record<string, unknown>): void;
-      setState(state: any): void;
-      getState(): any;
+      setState(state: unknown): void;
+      getState(): unknown;
     };
   }
 }

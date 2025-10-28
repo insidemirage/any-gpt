@@ -1,7 +1,7 @@
 import { Message } from "@/models";
-import baseSystemPromptRaw from "./baseSystemPrompt.md?raw";
-import reviewPromptRaw from "./reviewPrompt.md?raw";
-import documentationPromptRaw from "./docsPrompt.md?raw";
+import baseSystemPromptRaw from "./baseSystemPrompt.txt?raw";
+import reviewPromptRaw from "./reviewPrompt.txt?raw";
+import documentationPromptRaw from "./docsPrompt.txt?raw";
 
 import { SourceCode } from "@shared/code";
 import { WebViewAnalizeCodeOptions } from "@shared/events";

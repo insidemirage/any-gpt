@@ -9,7 +9,11 @@ import { updateChatSettings } from "../settingsSlice";
 import { getTags, processCode } from "../actions";
 import { selectTyped } from "./utils";
 import axiosInstance, { BASE_URL } from "@/api/axiosInstance";
-import { ChatSettings, OllamaStreamResponse } from "@/models/ollama";
+import {
+  ChatSettings,
+  OllamaStreamResponse,
+  OllamaTagsResponse,
+} from "@/models/ollama";
 import { nanoid } from "@reduxjs/toolkit";
 import {
   chatSettingsSelector,
@@ -22,6 +26,7 @@ import {
   getDocumentationFormattedPrompt,
   getReviewFormattedPrompt,
 } from "@/prompts";
+import { AxiosResponse } from "axios";
 
 export function* sendChatMessageStreamSaga(
   action: ReturnType<typeof sendChatMessageStream>
@@ -33,7 +38,7 @@ export function* sendChatMessageStreamSaga(
     const { prompt, model } = action.payload;
     const abortController = new AbortController();
 
-    const response = yield fetch(`${BASE_URL}/api/chat`, {
+    const response: Response = yield fetch(`${BASE_URL}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       signal: abortController.signal,
@@ -61,7 +66,7 @@ export function* sendChatMessageStreamSaga(
         timestamp: Date.toString(),
       })
     );
-    const reader = response.body.getReader();
+    const reader = response.body!.getReader();
     if (!response.ok || !response.body) {
       throw new Error("Failed to connect to Ollama");
     }
@@ -115,7 +120,9 @@ export function* sendChatMessageStreamSaga(
 
 export function* getTagsSaga() {
   try {
-    const response = yield axiosInstance.get("/api/tags");
+    const response: AxiosResponse<OllamaTagsResponse> = yield axiosInstance.get(
+      "/api/tags"
+    );
     const models = response.data.models.map((model) => model.name);
     yield put(updateChatSettings({ tags: models, model: models[0] }));
   } catch (error) {
