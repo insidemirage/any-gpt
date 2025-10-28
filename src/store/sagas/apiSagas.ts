@@ -6,14 +6,22 @@ import {
   setCurrentTask,
 } from "../chatDataSlice";
 import { updateChatSettings } from "../settingsSlice";
-import { getTags } from "../actions";
+import { getTags, processCode } from "../actions";
 import { selectTyped } from "./utils";
 import axiosInstance, { BASE_URL } from "@/api/axiosInstance";
-import { OllamaStreamResponse } from "@/models/ollama";
+import { ChatSettings, OllamaStreamResponse } from "@/models/ollama";
 import { nanoid } from "@reduxjs/toolkit";
-import { currentTaskSelector, messagesSelector } from "../selectors";
+import {
+  chatSettingsSelector,
+  currentTaskSelector,
+  messagesSelector,
+} from "../selectors";
 import { Message } from "@/models";
-import { baseSystemPrompt } from "@/prompts";
+import {
+  baseSystemPrompt,
+  getDocumentationFormattedPrompt,
+  getReviewFormattedPrompt,
+} from "@/prompts";
 
 export function* sendChatMessageStreamSaga(
   action: ReturnType<typeof sendChatMessageStream>
@@ -60,6 +68,7 @@ export function* sendChatMessageStreamSaga(
 
     const decoder = new TextDecoder();
     let totalText = "";
+    let thinking = false;
     while (true) {
       const { done, value } = yield reader.read();
       if (done) break;
@@ -72,7 +81,19 @@ export function* sendChatMessageStreamSaga(
       for (const line of lines) {
         try {
           const json: OllamaStreamResponse = JSON.parse(line);
-          totalText += json.message.content;
+          if (!json.message.content) {
+            if (!thinking) {
+              totalText += "Let's think...   \n";
+            }
+            thinking = true;
+            totalText += json.message.thinking;
+          } else {
+            if (thinking) {
+              totalText = "";
+              thinking = false;
+            }
+            totalText += json.message.content;
+          }
           yield put(
             editMessage({
               id,
@@ -102,7 +123,37 @@ export function* getTagsSaga() {
   }
 }
 
+export function* processCodeSaga(action: ReturnType<typeof processCode>) {
+  try {
+    const settings: ChatSettings = yield selectTyped(chatSettingsSelector);
+    const { command, codeData, options } = action.payload;
+    // TODO: show error select model first
+    if (!settings.model) return;
+
+    console.log(command);
+    let prompt = "";
+    switch (command) {
+      case "reviewCode":
+        prompt = getReviewFormattedPrompt(codeData, options);
+        // message
+        break;
+      case "documentCode":
+        prompt = getDocumentationFormattedPrompt(codeData);
+        break;
+    }
+    yield put(
+      sendChatMessageStream({
+        prompt,
+        model: settings.model,
+      })
+    );
+  } catch (error) {
+    console.error("Error reviewing code:", error);
+  }
+}
+
 export const apiSagas = [
   takeEvery(sendChatMessageStream.type, sendChatMessageStreamSaga),
   takeEvery(getTags.type, getTagsSaga),
+  takeEvery(processCode.type, processCodeSaga),
 ];

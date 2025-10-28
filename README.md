@@ -13,6 +13,9 @@ An open-source VSCode extension that enables developers to use any GPT model for
 - [ ] Diff preview before applying changes
 - [ ] Prompts for code-related tasks
 - [ ] Generation from comments (e.g., `// @ag create function for seamless integration`)
+- [ ] Sanitize document from marked
+- [x] Thinking process?
+- [ ] Hide thinking upder spoiler
 
 ## Installation
 

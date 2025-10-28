@@ -9,6 +9,7 @@ export interface OllamaStreamResponse {
   message: {
     role: string;
     content: string;
+    thinking: string;
   };
   done: boolean;
 }

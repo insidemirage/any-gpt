@@ -7,8 +7,12 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["shared/*"]
+    }
   },
-  "include": ["src-ext/extension.ts"],
+  "include": ["src-ext/extension.ts", "shared"],
   "exclude": ["src"]
 }

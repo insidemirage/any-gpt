@@ -1,5 +1,3 @@
-**Universal Code Review Prompt (Files or Snippets):**
-
 > You are an experienced software engineer performing a professional code review.  
 > I may provide either complete files (with paths) or isolated code snippets—treat each input appropriately based on the available context.
 >

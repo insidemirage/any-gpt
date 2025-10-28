@@ -45,13 +45,12 @@
     "start:webview": "vite dev",
     "lint": "eslint src --ext .ts,.tsx",
     "lint-staged": "lint-staged",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --project ./tsconfig.json --noEmit",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix",
-      "tsc --noEmit"
+      "eslint --fix"
     ]
   },
   "keywords": [
@@ -65,6 +64,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/lodash": "^4.17.20",
+    "@types/node": "^24.9.2",
     "@types/vscode": "^1.74.0",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",

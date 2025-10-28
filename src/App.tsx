@@ -7,10 +7,24 @@ import { theme } from "./styles/theme";
 import { ChatContent } from "./components/ChatContent/ChatContent";
 import { ChatInput } from "./components/ChatInput/ChatInput";
 import { loadState } from "./persistence";
+import { WebViewAnalizeCodeEvents } from "@shared/events";
+import { useDispatch } from "react-redux";
+import { processCode } from "./store/actions";
 
 const App: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const messagesHandler = (event: MessageEvent<WebViewAnalizeCodeEvents>) => {
+    const message = event.data;
+    if (message.command) {
+      dispatch(processCode(message));
+    }
+  };
+
   useEffect(() => {
     loadState();
+    window.addEventListener("message", messagesHandler);
+    return () => window.removeEventListener("message", messagesHandler);
   }, []);
   return (
     <MuiThemeProvider theme={theme}>
