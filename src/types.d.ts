@@ -51,3 +51,13 @@ declare module "*.md?raw" {
   const content: string;
   export default content;
 }
+
+declare global {
+  interface Window {
+    acquireVsCodeApi(): {
+      postMessage(payload: Record<string, unknown>): void;
+      setState(state: any): void;
+      getState(): any;
+    };
+  }
+}

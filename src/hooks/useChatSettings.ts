@@ -8,7 +8,7 @@ export const useChatSettings = () => {
   const settings = useSelector(chatSettingsSelector);
 
   const updateChatSettingsHandler = useCallback(
-    (settings: ChatSettings) => {
+    (settings: Partial<ChatSettings>) => {
       dispatch(updateChatSettings(settings));
     },
     [dispatch]
